@@ -25,7 +25,7 @@ public class Arbol {
     private boolean especieInvasiva;
     private String fruto;
     private int edad;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST}, mappedBy = "arbol")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST}, mappedBy = "arbol", orphanRemoval = true)
     private List<Rama> ramas = new ArrayList<>();
 
 

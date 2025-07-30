@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.cic.curso25.proy08.model.Arbol;
 import es.cic.curso25.proy08.model.Rama;
 import es.cic.curso25.proy08.repository.ArbolRepository;
+import es.cic.curso25.proy08.repository.RamaRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -36,6 +37,9 @@ public class ArbolControllerIntegrationTest {
 
     @Autowired
     private ArbolRepository arbolRepository;
+
+    @Autowired
+    private RamaRepository ramaRepository;
 
     @Autowired 
     private MockMvc mockMvc;
@@ -116,6 +120,8 @@ public class ArbolControllerIntegrationTest {
 
         //comprobamos tambien que no existe
         assertTrue(arbolRepository.findById(idGenerado).isEmpty());
+        //comprobamos si se han borrado las ramas
+        assertTrue(ramaRepository.findAll().size() == 0);
         
     }
 
@@ -259,6 +265,7 @@ public class ArbolControllerIntegrationTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.color").value("amarronado"));
+
 
 
     }
