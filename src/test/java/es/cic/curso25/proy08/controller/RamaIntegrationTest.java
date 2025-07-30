@@ -71,7 +71,7 @@ public class RamaIntegrationTest {
         List<Rama> ramas = arbolRepository.findById(idArbol).get().getRamas();
         //borramos las ramas
         for (Rama rama : ramas) {
-            ramaRepository.delete(rama);
+            ramaRepository.deleteById(rama.getId());
         }
         //recuperamos la lista del arbol que se generó para ver si está vacia
         assertTrue(arbolRepository.findById(idArbol).get().getRamas().size() == 0);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +26,9 @@ public class Arbol {
     private boolean especieInvasiva;
     private String fruto;
     private int edad;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST}, mappedBy = "arbol", orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REFRESH ,CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST}, 
+    mappedBy = "arbol", orphanRemoval = true, 
+    fetch = FetchType.EAGER)
     private List<Rama> ramas = new ArrayList<>();
 
 
