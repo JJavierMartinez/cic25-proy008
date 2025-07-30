@@ -54,27 +54,38 @@ public class RamaIntegrationTest {
         arbol.setEspecie("pino");
         arbol.setPerenne(true);
         arbol.setPeso(200);
+
         Rama rama1 = new Rama();
         rama1.setArbol(arbol);
         rama1.setHojaCompuesta(true);
         rama1.setLongitud(10);
         rama1.setNumHojas(200);
+
         Rama rama2 = new Rama();
         rama2.setArbol(arbol);
         rama2.setHojaCompuesta(true);
         rama2.setLongitud(5);
         rama2.setNumHojas(100);
+
         arbol.getRamas().add(rama1);
         arbol.getRamas().add(rama2);
+
         Long idArbol = arbolRepository.save(arbol).getId();
         //utilizamos ese id para recuperar las ramas
         List<Rama> ramas = arbolRepository.findById(idArbol).get().getRamas();
-        //borramos las ramas
+        //borramos las ramas de la base de datos
         for (Rama rama : ramas) {
             ramaRepository.deleteById(rama.getId());
         }
-        //recuperamos la lista del arbol que se generó para ver si está vacia
+        //borramos la lista del arbol para que no se quede apuntando a registros que no existen
+        arbolRepository.findById(idArbol).get().getRamas().clear();
+        //comprobamos que la lista esta vacia
         assertTrue(arbolRepository.findById(idArbol).get().getRamas().size() == 0);
-        
+        //comprobamos que las ramas no existen
+        for (Rama rama : ramas) {
+            assertTrue(ramaRepository.findById(rama.getId()).isEmpty());
+        }
+
     }
+
 }

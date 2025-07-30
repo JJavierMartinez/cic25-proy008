@@ -113,6 +113,8 @@ public class ArbolControllerIntegrationTest {
 
         Long idGenerado = arbolRepository.save(arbol).getId();
 
+        List<Rama> ramas = arbolRepository.findById(idGenerado).get().getRamas();
+
         //borramos el arbol con el id que se ha generado
         mockMvc.perform(delete("/arbol/" + idGenerado))
         .andDo(print())
@@ -121,7 +123,9 @@ public class ArbolControllerIntegrationTest {
         //comprobamos tambien que no existe
         assertTrue(arbolRepository.findById(idGenerado).isEmpty());
         //comprobamos si se han borrado las ramas
-        assertTrue(ramaRepository.findAll().size() == 0);
+        for (Rama rama : ramas) {
+            assertTrue(ramaRepository.findById(rama.getId()).isEmpty());
+        }
         
     }
 
@@ -266,7 +270,45 @@ public class ArbolControllerIntegrationTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.color").value("amarronado"));
 
+    }
 
+    @Test
+    void testCrearConExcepcion() throws Exception{
+        //creamos un objeto arbol con id
+        Arbol arbol = new Arbol();
+        arbol.setId(1L);
+        arbol.setColor("gris");
+        arbol.setEdad(20);
+        arbol.setEspecie("abeto");
+        arbol.setPerenne(true);
+        arbol.setPeso(200);
+        //lo serializamos
+        String arbolJson = objectMapper.writeValueAsString(arbol);
+        //hacemos la llamada http
+        mockMvc.perform(post("/arbol")
+        .contentType("application/json")
+        .content(arbolJson))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    void testModificarCoExcepcion() throws Exception {
+         //creamos un objeto
+        Arbol arbol = new Arbol();
+        arbol.setColor("gris");
+        arbol.setEdad(20);
+        arbol.setEspecie("abeto");
+        arbol.setPerenne(true);
+        arbol.setPeso(200);
+        //lo serializamos
+        String arbolJson = objectMapper.writeValueAsString(arbol);
+        //hacemos la llamada http a actualizar
+        mockMvc.perform(put("/arbol")
+        .contentType("application/json")
+        .content(arbolJson))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
     }
 }
