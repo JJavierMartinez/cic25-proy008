@@ -1,11 +1,12 @@
 package es.cic.curso25.proy08.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -21,8 +22,8 @@ public class Rama {
     private double grosor;
     private double longitud;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id")
     private Arbol arbol;
 
     public Long getId() {
